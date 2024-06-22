@@ -1,6 +1,8 @@
 import express from "express";
+import UserRepository from "./user-repository.js";
 
 const app = express();
+app.use(express.json());
 
 const PORT = process.env.PORT ?? 3000;
 
@@ -13,7 +15,15 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  res.send("Register");
+  const { username, password } = req.body;
+  console.log(req.body);
+
+  try {
+    const id = UserRepository.create({ username, password });
+    res.json({ id });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 app.post("/forgot-password", (req, res) => {
