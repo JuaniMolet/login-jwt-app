@@ -1,51 +1,13 @@
 import express from "express";
-import UserRepository from "./user-repository.js";
+import userRoutes from "./routes/userRoutes.js";
+import bodyParser from "body-parser";
 
 const app = express();
-app.use(express.json());
 
-const PORT = process.env.PORT ?? 3000;
+app.use(bodyParser.json());
+app.use("/users", userRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-app.post("/login", (req, res) => {
-  res.json({ user: "John Doe" });
-});
-
-app.post("/register", (req, res) => {
-  const { username, password } = req.body;
-  console.log(req.body);
-
-  try {
-    const id = UserRepository.create({ username, password });
-    res.json({ id });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-app.post("/forgot-password", (req, res) => {
-  res.send("Forgot Password");
-});
-
-app.post("/reset-password", (req, res) => {
-  res.send("Reset Password");
-});
-
-app.post("/change-password", (req, res) => {
-  res.send("Change Password");
-});
-
-app.post("/logout", (req, res) => {
-  res.send("Logout");
-});
-
-app.get("/protected", (req, res) => {
-  res.send("Protected");
-});
-
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
