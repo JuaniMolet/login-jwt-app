@@ -11,7 +11,8 @@ const registerUser = async (req, res) => {
     const user = await prisma.user.create({
       data: { username, password: hashedPassword },
     });
-    res.status(201).json(user);
+    const { password, ...userPublic } = user;
+    res.status(201).json(userPublic);
   } catch (error) {
     res.status(400).json({ error: "User already exists" });
   }
@@ -48,7 +49,8 @@ const getUserByUsername = async (req, res) => {
   const { username } = req.body;
   try {
     const user = await prisma.user.findUnique({ where: { username } });
-    res.json(user);
+    const { password, ...userPublic } = user;
+    res.json(userPublic);
   } catch (error) {
     res.status(404).json({ error: "User not found" });
   }
