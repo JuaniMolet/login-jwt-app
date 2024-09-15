@@ -1,7 +1,6 @@
 'use client';
-
 import { useUser } from '@auth0/nextjs-auth0/client';
-import Image from 'next/image';
+import { LogoutButton } from '../components/buttons/logout-button';
 
 export default function ProfileClient() {
   const { user, error, isLoading } = useUser();
@@ -10,12 +9,14 @@ export default function ProfileClient() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    user && (
+    <>
+      user && (
       <div>
-        {user && <Image src={user.picture ?? ''} alt={user.name ?? ''} />}
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
+        <h2>{user?.name}</h2>
+        <p>{user?.email}</p>
       </div>
-    )
+      )
+      <LogoutButton />
+    </>
   );
 }
